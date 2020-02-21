@@ -30,10 +30,9 @@ app = create_app()
 # mongo_username = quote_plus(app.config.get('MONGO_USERNAME'))
 # mongo_password = quote_plus((app.config.get('MONGO_PASSWORD')))
 # mongo_cluster = app.config.get('MONGO_CLUSTER')
-# mongo_uri_env = app.config.get('MONGO_URI')
 
-mongo_uri = "PUT ATLAS URL HERE"
-client = MongoClient(mongo_uri)
+# mongo_uri = "PUT ATLAS URL HERE"
+client = MongoClient(os.environ.get('MONGO_URI'))
 
 # mongo = PyMongo(app)
 db=client['carnotes']
