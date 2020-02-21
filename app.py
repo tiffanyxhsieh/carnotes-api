@@ -64,7 +64,7 @@ def createNote():
 #Endpoint for deleting one note
 @app.route('/notes/<note_id>', methods=['DELETE'])
 def deleteNote(note_id):
-    return jsonify(cdb.notes.delete_one(note_id))
+    return jsonify(db.notes.delete_one(note_id))
 #Endpoint for getting one note
 @app.route('/notes/<note_id>', methods=['GET'])
 def getNote(note_id):
