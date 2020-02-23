@@ -140,7 +140,9 @@ def notes():
 @token_required
 def note(note_id):
     if request.method == "DELETE":
-        return jsonify(db.notes.delete_one(note_id))
+        foundNote = db.notes.delete_one({'_id': ObjectId(note_id)})
+        foundNote['_id'] = str(foundNote['_id'])
+        return jsonify(foundNote)
     if request.method == "GET":
         foundNote = db.notes.find_one({'_id': ObjectId(note_id)})
         foundNote['_id'] = str(foundNote['_id'])
