@@ -152,7 +152,7 @@ def note(note_id):
         foundNote['_id'] = str(foundNote['_id'])
         return jsonify(foundNote)
 
-    if request.method == "PUT"
+    if request.method == "PUT":
         newNote={"title": request.headers['noteTitle'],
         "note":request.headers['noteBody']}
         foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)})
