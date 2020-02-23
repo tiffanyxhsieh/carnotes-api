@@ -156,7 +156,7 @@ def note(note_id):
         newNote={"title": request.headers['noteTitle'],
         "note":request.headers['noteBody']}
         foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)}, newNote)
-        if foundNote == NONE:
+        if foundNote is None:
             return jsonify({"message":"id does not exist"})
         else:
             foundNote['_id'] = str(foundNote['_id'])
