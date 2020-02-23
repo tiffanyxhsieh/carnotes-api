@@ -136,7 +136,7 @@ def notes():
     
     
 # Endpoint for getting or deleting one note.
-@app.route('/rest/notes/<note_id>', methods=['DELETE', 'GET'])
+@app.route('/rest/notes/<note_id>', methods=['DELETE', 'GET', 'PUT'])
 @token_required
 def note(note_id):
     if request.method == "DELETE":
@@ -151,6 +151,16 @@ def note(note_id):
         foundNote = db.notes.find_one({'_id': ObjectId(note_id)})
         foundNote['_id'] = str(foundNote['_id'])
         return jsonify(foundNote)
+
+    if request.method == "PUT"
+        newNote={"title": request.headers['noteTitle'],
+        "note":request.headers['noteBody']}
+        foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)})
+        if foundNote == NONE:
+            return jsonify({"message":"id does not exist"})
+        else:
+            foundNote['_id'] = str(foundNote['_id'])
+            return jsonify(foundNote)
 
 
 
