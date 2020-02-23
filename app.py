@@ -8,6 +8,7 @@ from bson import json_util, ObjectId
 from functools import wraps
 from flask_pymongo import PyMongo
 from pymongo import MongoClient, uri_parser
+from pymongo.collection import ReturnDocument
 from flask import Flask, jsonify, request, render_template
 
 def create_app() -> Flask:
@@ -132,7 +133,8 @@ def notes():
         post={"title": request.headers['noteTitle'],
         "note":request.headers['noteBody']}
         db.notes.insert(post)
-        return json.dumps(post, indent=4, default=json_util.default)
+        post['_id']=str(post['_id'])
+        return post
     
     
 # Endpoint for getting or deleting one note.
