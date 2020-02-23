@@ -15,15 +15,13 @@ def create_app() -> Flask:
     # Configures application and returns it.
     :return:
     '''
-    app = Flask(__name__)
-    app.config.from_pyfile('config.py')
-
-    # application.config['DEBUG'] = "DEBUG"
-    # application.config['TESTING'] = "TESTING"
-    # application.config['FLASK_ENV'] = "FLASK_ENV"
-    # application.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-
-    return app
+    application = Flask(__name__)
+    application.config['DEBUG'] = os.environ.get('DEBUG')
+    application.config['TESTING'] = os.environ.get('TESTING')
+    application.config['FLASK_ENV'] = os.environ.get('FLASK_ENV')
+    application.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    application.config['MONGO_URI'] = os.environ.get('MONGO_URI')
+    return application
 
 app = create_app()
 
