@@ -141,8 +141,8 @@ def notes():
 def note(note_id):
     if request.method == "DELETE":
         deletedNote = db.notes.find_one_and_delete({'_id': ObjectId(note_id)})
-        foundNote['_id'] = str(foundNote['_id'])
-        return jsonify(foundNote)
+        deletedNote['_id'] = str(deletedNote['_id'])
+        return jsonify(deletedNote)
     if request.method == "GET":
         foundNote = db.notes.find_one({'_id': ObjectId(note_id)})
         foundNote['_id'] = str(foundNote['_id'])
