@@ -142,7 +142,7 @@ def note(note_id):
     if request.method == "DELETE":
         return jsonify(db.notes.delete_one(note_id))
     if request.method == "GET":
-        return jsonify(db.notes.find_one({"_id": ObjectId(str(note_id))}))
+        return jsonify(db.notes.find_one({"_id": str(note_id)}))
 
 
 
