@@ -140,9 +140,13 @@ def notes():
 @token_required
 def note(note_id):
     if request.method == "DELETE":
-        deletedNote = db.notes.find_one_and_delete({'_id': ObjectId(note_id)})
-        deletedNote['_id'] = str(deletedNote['_id'])
-        return jsonify(deletedNote)
+        try:
+            deletedNote = db.notes.find_one_and_delete({'_id': ObjectId(note_id)})
+            deletedNote['_id'] = str(deletedNote['_id'])
+            return jsonify(deletedNote)
+        except:
+            return jsonify({"message":"id does not exist"})
+        
     if request.method == "GET":
         foundNote = db.notes.find_one({'_id': ObjectId(note_id)})
         foundNote['_id'] = str(foundNote['_id'])
