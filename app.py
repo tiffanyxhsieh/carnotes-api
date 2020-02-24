@@ -130,8 +130,8 @@ def notes():
             result.append(note)
         return jsonify({"notes": result})
     if request.method == 'POST':
-        post={"title": request.headers['noteTitle'],
-        "note":request.headers['noteBody']}
+        post={"title": request.headers['title'],
+        "note":request.headers['note']}
         db.notes.insert(post)
         post['_id']=str(post['_id'])
         return post
@@ -155,8 +155,8 @@ def note(note_id):
         return jsonify(foundNote)
 
     if request.method == "PUT":
-        newNote={"title": request.headers['noteTitle'],
-        "note":request.headers['noteBody']}
+        newNote={"title": request.headers['title'],
+        "note":request.headers['body']}
         foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)}, newNote,return_document=ReturnDocument.AFTER)
         if foundNote is None:
             return jsonify({"message":"id does not exist"})
