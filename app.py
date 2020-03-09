@@ -51,8 +51,8 @@ def token_required(f):
 
 
 @app.route('/')
-def hello_world():
-    return 'test'
+def index():
+    return render_template('index.html')
 
 # Endpoint for logging into the API.
 @app.route('/rest/login', methods=['POST'])
