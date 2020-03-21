@@ -163,8 +163,12 @@ def note(note_id):
         return jsonify(foundNote)
 
     if request.method == "PUT":
+        user = str(jwt.decode(request.headers["Authorization"], app.config["SECRET_KEY"])['user'])
+        now=datetime.datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+
         newNote={"title": request.headers['title'],
-        "note":request.headers['note']}
+        "note":request.headers['note'], "timestamp": dt_string, "user": user}
         foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)}, newNote,return_document=ReturnDocument.AFTER)
         if foundNote is None:
             return jsonify({"message":"id does not exist"})
