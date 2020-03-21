@@ -75,6 +75,7 @@ def login():
                     token = jwt.encode({"user": data["username"], "exp": datetime.datetime.utcnow() +
                                                                          datetime.timedelta(hours=24)},
                                        app.config["SECRET_KEY"])
+
                     return jsonify({"message": "Login succesful!", "token": token.decode('utf-8')})
                 else:
                     return jsonify({"message": "Incorrect password! Please try again."}), 401
@@ -121,17 +122,24 @@ def register():
 @app.route('/rest/notes', methods=['GET', 'POST'])
 @token_required
 def notes():
+    user = str(jwt.decode(request.headers["Authorization"], app.config["SECRET_KEY"])['user'])
     if request.method == 'GET':
-        notes = db.notes.find()
+        notes = db.notes.find({"user": user})
         result=[]
-
         for note in notes:
             note['_id'] = str(note['_id'])
             result.append(note)
         return jsonify({"notes": result})
     if request.method == 'POST':
-        post={"title": request.headers['title'],
-        "note":request.headers['note']}
+        #timestamp formatting
+        now=datetime.datetime.now()
+        dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+        #create json object to insert
+        post = {"title": request.headers['title'],
+        "note": request.headers['note'],
+        "timestamp": dt_string,
+        "user":user}
+
         db.notes.insert(post)
         post['_id']=str(post['_id'])
         return post
