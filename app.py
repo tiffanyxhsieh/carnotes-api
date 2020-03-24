@@ -131,13 +131,17 @@ def notes():
             result.append(note)
         return jsonify({"notes": result})
     if request.method == 'POST':
+        data = request.get_json();
         #timestamp formatting
         now=datetime.datetime.now()
         dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+        #parse individual items
+
         #create json object to insert
-        post = {"title": request.headers['title'],
-        "note": request.headers['note'],
-        "timestamp": dt_string,
+        post = {
+        "title": data['title'],
+        "items": data['items'],
+        "lastEdited": dt_string,
         "user":user}
 
         db.notes.insert(post)
@@ -163,12 +167,17 @@ def note(note_id):
         return jsonify(foundNote)
 
     if request.method == "PUT":
+        data = request.get_json();
+
         user = str(jwt.decode(request.headers["Authorization"], app.config["SECRET_KEY"])['user'])
         now=datetime.datetime.now()
         dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
 
-        newNote={"title": request.headers['title'],
-        "note":request.headers['note'], "timestamp": dt_string, "user": user}
+        newNote={
+        "title": data['title'],
+        "items":data['items'],
+        "lastUpdated": dt_string,
+        "user": user}
         foundNote = db.notes.find_one_and_replace({'_id': ObjectId(note_id)}, newNote,return_document=ReturnDocument.AFTER)
         if foundNote is None:
             return jsonify({"message":"id does not exist"})
