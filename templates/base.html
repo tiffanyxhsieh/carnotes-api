@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='semantic/semantic.min.css')}}">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='semantic/semantic.min.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+    <link rel="shortcut icon" type="image/png" href="{{url_for('static', filename='img/airnotes-logo.png')}}"/>
+    <title>{% block title %}{% endblock %} - AirNotes</title>
+    {% endblock %}
+</head>
+
+<body>
+    <div class="ui top fixed inverted menu">
+        <div class="item">
+            <img src="{{url_for('static', filename='img/airnotes-logo.png')}}"><span id="title">AirNotes</span>
+        </div>
+        <a class="item" href="{{url_for('index')}}">Home</a>
+        <a class="item" href="{{url_for('privacy')}}">Privacy</a>
+        <a class="item" href="{{url_for('terms')}}">Terms of Service</a>
+    </div>
+    <div class="ui container" id="main">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p>&copy; AirNotes 2020 | All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
