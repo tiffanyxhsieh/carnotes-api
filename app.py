@@ -2,14 +2,12 @@ import os
 import jwt
 import bcrypt
 import datetime
-import json
-from urllib.parse import quote_plus
-from bson import json_util, ObjectId
+from bson import  ObjectId
 from functools import wraps
-from flask_pymongo import PyMongo
 from pymongo import MongoClient, uri_parser
 from pymongo.collection import ReturnDocument
 from flask import Flask, jsonify, request, render_template
+
 
 def create_app() -> Flask:
     application = Flask(__name__)
@@ -40,6 +38,8 @@ def token_required(f):
             # Try extracting data from the token. If it fails, return an error message.
             try:
                 data = jwt.decode(token, app.config["SECRET_KEY"])
+            except jwt.ExpiredSignatureError:
+                return jsonify({"message": "Token is expired!"}), 401
             except:
                 return jsonify({"message": "Token is invalid!"}), 401
         else:
@@ -85,6 +85,25 @@ def login():
             return jsonify({"message": "Username or password is blank!"}), 401
     else:
         return jsonify({"message": "Username or password field is missing from request!"}), 401
+
+
+#Endpoint for refreshing an existing token
+@app.route('/rest/refresh', methods=['POST'])
+def refresh():
+    if 'Authorization' in request.headers and request.headers["Authorization"]:
+        old_token = request.headers['Authorization']
+        try:
+            jwt.decode(old_token, app.config['SECRET_KEY'])
+        except jwt.ExpiredSignatureError:
+            data = request.get_json()
+            token = jwt.encode({"user": data["username"], "exp": datetime.datetime.utcnow() +
+                                                                 datetime.timedelta(days=30*6)},
+                               app.config["SECRET_KEY"])
+            return jsonify({"message": "Refresh succesful!", "token": token.decode('utf-8')})
+        except jwt.InvalidSignatureError:
+            return jsonify({"message": "Invalid token!"})
+    else:
+        return jsonify({"message": "Token is missing!"}), 401
 
 
 # Endpoint for registering with the API.
