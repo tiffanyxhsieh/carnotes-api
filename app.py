@@ -53,6 +53,17 @@ def token_required(f):
 @app.route('/')
 def index():
     return render_template('index.html')
+    
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+    
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
 
 # Endpoint for logging into the API.
 @app.route('/rest/login', methods=['POST'])
