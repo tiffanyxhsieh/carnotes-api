@@ -138,7 +138,7 @@ def register():
                 users.insert({'username': data['username'], 'password': hashpass, 'wishlist': []})
                 # Generate a JWT token to return to the user.
                 token = jwt.encode({"user": data["username"], "exp": datetime.datetime.utcnow() +
-                                            datetime.timedelta(hours=24)}, app.config["SECRET_KEY"])
+                                            datetime.timedelta(days=30*6)}, app.config["SECRET_KEY"])
                 return jsonify({"message": "New user '" + data["username"] + "' created!", "token": token.decode('utf-8')})
 
             return jsonify({"message": "User '" + data["username"] + "' already exists!"}), 401
