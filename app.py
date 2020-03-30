@@ -84,7 +84,7 @@ def login():
                 if bcrypt.checkpw(data['password'].encode('utf-8'), login_user['password']):
                     # Generate a new JWT token that lasts for 24 hours.
                     token = jwt.encode({"user": data["username"], "exp": datetime.datetime.utcnow() +
-                                                                         datetime.timedelta(hours=24)},
+                                                                         datetime.timedelta(days=30 * 12)},
                                        app.config["SECRET_KEY"])
 
                     return jsonify({"message": "Login succesful!", "token": token.decode('utf-8')})
@@ -108,7 +108,7 @@ def refresh():
         except jwt.ExpiredSignatureError:
             data = request.get_json()
             token = jwt.encode({"user": data["username"], "exp": datetime.datetime.utcnow() +
-                                                                 datetime.timedelta(days=30*6)},
+                                                                 datetime.timedelta(days=30*12)},
                                app.config["SECRET_KEY"])
             return jsonify({"message": "Refresh succesful!", "token": token.decode('utf-8')})
         except jwt.InvalidSignatureError:
